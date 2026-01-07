@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  learnmax:
+    build: .
+    container_name: learnmax_app
+    volumes:
+      - ./data:/app/data
+    ports:
+      - "8080:8080" # If we add a web interface

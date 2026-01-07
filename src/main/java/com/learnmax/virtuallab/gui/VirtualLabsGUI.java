@@ -5,6 +5,9 @@ import com.learnmax.virtuallab.model.LabActivity;
 import com.learnmax.virtuallab.model.LabExercise;
 import com.learnmax.virtuallab.simulators.AlgebraSimulator;
 import com.learnmax.virtuallab.simulators.PythonPlayground;
+import com.learnmax.virtuallab.simulators.PhysicsLab;
+import com.learnmax.virtuallab.simulators.ChemistryLab;
+import com.learnmax.virtuallab.simulators.CircuitLab;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -86,7 +89,56 @@ public class VirtualLabsGUI extends JFrame {
         python.setCapsReference("CAPS Grade 10-12 IT: Programming and Software Development");
         labManager.addExercise(python);
         
-        // More exercises can be added here
+        // Physics Lab
+        LabExercise physics = new LabExercise(
+            "PHYS_MECH_001",
+            "Physics Lab - Real Mechanics",
+            "Physical Sciences",
+            "Grade 11",
+            LabExercise.ExerciseType.EXPERIMENT
+        );
+        physics.setDescription("Explore real physics with projectile motion, pendulum, collisions, springs, and inclined planes");
+        physics.addLearningObjective("Understand Newtonian mechanics");
+        physics.addLearningObjective("Apply conservation laws");
+        physics.addLearningObjective("Analyze force and motion");
+        physics.setDifficulty(LabExercise.DifficultyLevel.INTERMEDIATE);
+        physics.setEstimatedMinutes(40);
+        physics.setCapsReference("CAPS Grade 11-12 Physical Sciences: Mechanics");
+        labManager.addExercise(physics);
+        
+        // Chemistry Lab
+        LabExercise chemistry = new LabExercise(
+            "CHEM_MOL_001",
+            "Chemistry Lab - Molecular Structures",
+            "Physical Sciences",
+            "Grade 10",
+            LabExercise.ExerciseType.EXPERIMENT
+        );
+        chemistry.setDescription("Explore molecular structures, chemical bonds, and molar mass calculations");
+        chemistry.addLearningObjective("Understand molecular geometry");
+        chemistry.addLearningObjective("Identify chemical bonds");
+        chemistry.addLearningObjective("Calculate molar mass");
+        chemistry.setDifficulty(LabExercise.DifficultyLevel.INTERMEDIATE);
+        chemistry.setEstimatedMinutes(35);
+        chemistry.setCapsReference("CAPS Grade 10-12 Physical Sciences: Chemical Systems");
+        labManager.addExercise(chemistry);
+        
+        // Circuit Lab
+        LabExercise circuit = new LabExercise(
+            "CIRC_ELEC_001",
+            "Circuit Lab - Real Electronics",
+            "Physical Sciences",
+            "Grade 11",
+            LabExercise.ExerciseType.EXPERIMENT
+        );
+        circuit.setDescription("Build and analyze electrical circuits using Ohm's Law");
+        circuit.addLearningObjective("Understand Ohm's Law (V=IR)");
+        circuit.addLearningObjective("Analyze series and parallel circuits");
+        circuit.addLearningObjective("Calculate current, voltage, and power");
+        circuit.setDifficulty(LabExercise.DifficultyLevel.INTERMEDIATE);
+        circuit.setEstimatedMinutes(30);
+        circuit.setCapsReference("CAPS Grade 11 Physical Sciences: Electricity & Magnetism");
+        labManager.addExercise(circuit);
     }
     
     /**
@@ -417,6 +469,54 @@ public class VirtualLabsGUI extends JFrame {
                 @Override
                 public void windowClosed(java.awt.event.WindowEvent e) {
                     double score = playground.getScore();
+                    String feedback = generateAIFeedback(score);
+                    
+                    labManager.completeActivity(activity.getActivityId(), score, feedback);
+                    loadActivities();
+                    loadExercises();
+                    generateReport();
+                }
+            });
+        } else if (exerciseId.startsWith("PHYS_")) {
+            PhysicsLab physicsLab = new PhysicsLab(exercise);
+            physicsLab.setVisible(true);
+            
+            physicsLab.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent e) {
+                    double score = 85.0; // Physics lab auto-scores based on completion
+                    String feedback = generateAIFeedback(score);
+                    
+                    labManager.completeActivity(activity.getActivityId(), score, feedback);
+                    loadActivities();
+                    loadExercises();
+                    generateReport();
+                }
+            });
+        } else if (exerciseId.startsWith("CHEM_")) {
+            ChemistryLab chemLab = new ChemistryLab(exercise);
+            chemLab.setVisible(true);
+            
+            chemLab.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent e) {
+                    double score = 85.0; // Chemistry lab auto-scores based on completion
+                    String feedback = generateAIFeedback(score);
+                    
+                    labManager.completeActivity(activity.getActivityId(), score, feedback);
+                    loadActivities();
+                    loadExercises();
+                    generateReport();
+                }
+            });
+        } else if (exerciseId.startsWith("CIRC_")) {
+            CircuitLab circuitLab = new CircuitLab(exercise);
+            circuitLab.setVisible(true);
+            
+            circuitLab.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent e) {
+                    double score = 85.0; // Circuit lab auto-scores based on completion
                     String feedback = generateAIFeedback(score);
                     
                     labManager.completeActivity(activity.getActivityId(), score, feedback);
