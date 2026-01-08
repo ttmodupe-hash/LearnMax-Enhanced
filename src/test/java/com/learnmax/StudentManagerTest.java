@@ -25,7 +25,7 @@ class StudentManagerTest {
             testFile.delete();
         }
         
-        manager = new StudentManager();
+        manager = new StudentManager(false); // Don't auto-load data for testing
     }
     
     @AfterEach

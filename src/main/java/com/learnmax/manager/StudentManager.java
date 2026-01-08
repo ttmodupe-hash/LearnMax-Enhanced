@@ -18,14 +18,26 @@ public class StudentManager {
     private ArrayList<Student> students;
     private static final String DATA_FILE = "student_data.json";
     private Gson gson;
+    private boolean autoLoad;
     
     public StudentManager() {
+        this(true); // Default: load data from file
+    }
+    
+    /**
+     * Constructor with option to skip loading data (useful for testing)
+     * @param autoLoad if true, loads data from file; if false, starts with empty list
+     */
+    public StudentManager(boolean autoLoad) {
         students = new ArrayList<>();
         gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(java.time.LocalDateTime.class, new LocalDateTimeAdapter())
                 .create();
-        loadData();
+        this.autoLoad = autoLoad;
+        if (autoLoad) {
+            loadData();
+        }
     }
     
     /**
